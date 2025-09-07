@@ -4,14 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
-    "start": "node dist/irc-bot.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "tsc": "tsc",
+    "start": "node irc-bot.ts",
   },
-  "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
     "@types/irc": "^0.5.4",
     "irc": "^0.5.2"
