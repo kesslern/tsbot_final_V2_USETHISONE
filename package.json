@@ -1,0 +1,22 @@
+{
+  "name": "abot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/irc-bot.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@types/irc": "^0.5.4",
+    "irc": "^0.5.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  }
+}
