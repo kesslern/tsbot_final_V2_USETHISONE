@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "tsc": "tsc",
-    "start": "node irc-bot.ts"
+    "start": "node irc-bot.ts",
+    "format": "prettier --write ."
   },
   "author": "",
   "license": "ISC",
@@ -16,6 +17,7 @@
     "zod": "^4.1.5"
   },
   "devDependencies": {
+    "prettier": "^3.6.2",
     "typescript": "^5.9.2"
   }
 }

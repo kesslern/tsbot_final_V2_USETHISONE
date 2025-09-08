@@ -1,6 +1,5 @@
 import z from 'zod';
 
-
 export const BotConfigSchema = z.object({
   server: z.string().min(1),
   port: z.number().int().min(1),
