@@ -6,7 +6,8 @@
   "scripts": {
     "tsc": "tsc",
     "start": "node irc-bot.ts",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "lint": "eslint . --ext .ts"
   },
   "author": "",
   "license": "ISC",
@@ -17,7 +18,15 @@
     "zod": "^4.1.5"
   },
   "devDependencies": {
+    "@eslint/js": "^9.35.0",
+    "@typescript-eslint/eslint-plugin": "^8.42.0",
+    "@typescript-eslint/parser": "^8.42.0",
+    "eslint": "^9.35.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^16.3.0",
+    "jiti": "^2.5.1",
     "prettier": "^3.6.2",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.42.0"
   }
 }

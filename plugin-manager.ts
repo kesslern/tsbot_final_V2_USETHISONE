@@ -55,13 +55,13 @@ export class PluginManager {
 
   handleJoin(channel: string, nick: string) {
     Object.values(this.plugins).forEach((plugin) => {
-      if (plugin.onJoin) plugin.onJoin({ channel, nick, bot: this.bot });
+      if (plugin.onJoin) {plugin.onJoin({ channel, nick, bot: this.bot });}
     });
   }
 
   handleMessage(from: string, to: string, message: string) {
     Object.values(this.plugins).forEach((plugin) => {
-      if (plugin.onMessage) plugin.onMessage({ from, to, message, bot: this.bot });
+      if (plugin.onMessage) {plugin.onMessage({ from, to, message, bot: this.bot });}
     });
   }
 }
