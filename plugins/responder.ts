@@ -1,13 +1,13 @@
-import irc from 'irc';
+import type { Plugin } from '../plugin-manager.js';
 
-const responder = {
+const responder: Plugin = {
     name: 'responder',
-    onJoin: (channel: string, nick: string, bot: irc.Client) => {
+    onJoin: (channel, nick, bot) => {
         if (nick === bot.nick) {
             bot.say(channel, 'hello');
         }
     },
-    onMessage: (from: string, to: string, message: string, bot: irc.Client) => {
+    onMessage: (from, to, message, bot) => {
         if (message.toLowerCase().includes(bot.nick.toLowerCase())) {
             bot.say(to, 'hello');
         }
