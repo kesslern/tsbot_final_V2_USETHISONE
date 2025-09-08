@@ -8,9 +8,7 @@ const responder: Plugin = {
         }
     },
     onMessage: (from, to, message, bot) => {
-        if (message.toLowerCase().includes(bot.nick.toLowerCase())) {
-            bot.say(to, 'hello');
-        }
+      bot.say(to, 'hello');
     },
 };
 

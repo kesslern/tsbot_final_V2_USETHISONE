@@ -43,9 +43,11 @@ bot.addListener('join', (channel, nick) => {
 
 
 bot.addListener('message', async (from, to, message) => {
-    const loadMatch = message.match(/^!load (\w+)/i);
-    const unloadMatch = message.match(/^!unload (\w+)/i);
-    const reloadMatch = message.match(/^!reload (\w+)/i);
+    const prefix = config.prefix;
+    const escapedPrefix = prefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const loadMatch = message.match(new RegExp(`^${escapedPrefix}load (\\w+)`, 'i'));
+    const unloadMatch = message.match(new RegExp(`^${escapedPrefix}unload (\\w+)`, 'i'));
+    const reloadMatch = message.match(new RegExp(`^${escapedPrefix}reload (\\w+)`, 'i'));
     const isAdmin = config.admins.includes(from);
     if (loadMatch || unloadMatch || reloadMatch) {
         if (!isAdmin) {
