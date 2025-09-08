@@ -1,4 +1,4 @@
-import type { Plugin } from '../plugin-manager.js';
+import type { Plugin } from '../plugin-manager.ts';
 
 const responder: Plugin = {
     name: 'responder',

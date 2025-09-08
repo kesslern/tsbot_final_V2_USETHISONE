@@ -20,7 +20,7 @@ export class PluginManager {
     }
 
     async loadPlugin(pluginName: string, channel: string) {
-        const pluginPath = path.join(this.pluginDir, pluginName + '.js');
+        const pluginPath = path.join(this.pluginDir, pluginName + '.ts');
         if (!fs.existsSync(pluginPath)) {
             this.bot.say(channel, `Plugin '${pluginName}' not found.`);
             this.bot.say(channel, `I looked at ${pluginPath}`);
