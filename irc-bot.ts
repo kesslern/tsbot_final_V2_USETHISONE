@@ -1,7 +1,9 @@
+
 import irc from 'irc';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import { BotConfigSchema, type BotConfig } from './config-schema.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,12 +15,21 @@ type Plugin = {
     unload?: () => void;
 };
 
-const config = {
-    server: 'irc.libera.chat',
-    port: 6667,
-    nick: 'TypeScriptBot',
-    channels: ['#examplechannel'],
-};
+
+// Dynamically import config and validate with Zod
+let config: BotConfig;
+try {
+    const configModule = await import('./config.ts');
+    const parsed = BotConfigSchema.safeParse(configModule.default);
+    if (!parsed.success) {
+        console.error('Invalid config:', parsed.error.format());
+        process.exit(1);
+    }
+    config = parsed.data;
+} catch (err) {
+    console.error('Failed to load config:', err);
+    process.exit(1);
+}
 
 const bot = new irc.Client(config.server, config.nick, {
     channels: config.channels,
@@ -29,7 +40,6 @@ const bot = new irc.Client(config.server, config.nick, {
 const plugins: Record<string, Plugin> = {};
 
 async function loadPlugin(pluginName: string, channel: string) {
-    // Always load the compiled JS plugin from dist/plugins
     const pluginPath = path.join(__dirname, 'plugins', pluginName + '.ts');
     if (!fs.existsSync(pluginPath)) {
         bot.say(channel, `Plugin '${pluginName}' not found.`);

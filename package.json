@@ -5,14 +5,15 @@
   "main": "index.js",
   "scripts": {
     "tsc": "tsc",
-    "start": "node irc-bot.ts",
+    "start": "node irc-bot.ts"
   },
   "author": "",
   "license": "ISC",
   "type": "module",
   "dependencies": {
     "@types/irc": "^0.5.4",
-    "irc": "^0.5.2"
+    "irc": "^0.5.2",
+    "zod": "^4.1.5"
   },
   "devDependencies": {
     "typescript": "^5.9.2"

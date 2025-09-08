@@ -1,12 +1,14 @@
 {
   "compilerOptions": {
-  "target": "ES2022",
-  "module": "nodenext",
-    "strict": true,
+    "allowImportingTsExtensions": true,
     "esModuleInterop": true,
-    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "dist"
+    "module": "nodenext",
+    "noEmit": true,
+    "outDir": "dist",
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ES2022"
   },
   "include": ["irc-bot.ts", "plugins/*"]
 }
