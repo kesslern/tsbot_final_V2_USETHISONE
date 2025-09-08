@@ -4,8 +4,8 @@ import fs from 'fs';
 
 export type Plugin = {
     name: string;
-    onMessage?: (from: string, to: string, message: string, bot: irc.Client) => void;
-    onJoin?: (channel: string, nick: string, bot: irc.Client) => void;
+    onMessage?: (params: { from: string; to: string; message: string; bot: irc.Client }) => void;
+    onJoin?: (params: { channel: string; nick: string; bot: irc.Client }) => void;
     unload?: () => void;
 };
 
@@ -55,13 +55,13 @@ export class PluginManager {
 
     handleJoin(channel: string, nick: string) {
         Object.values(this.plugins).forEach(plugin => {
-            if (plugin.onJoin) plugin.onJoin(channel, nick, this.bot);
+            if (plugin.onJoin) plugin.onJoin({ channel, nick, bot: this.bot });
         });
     }
 
     handleMessage(from: string, to: string, message: string) {
         Object.values(this.plugins).forEach(plugin => {
-            if (plugin.onMessage) plugin.onMessage(from, to, message, this.bot);
+            if (plugin.onMessage) plugin.onMessage({ from, to, message, bot: this.bot });
         });
     }
 }
