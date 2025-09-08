@@ -43,10 +43,16 @@ bot.addListener('join', (channel, nick) => {
 
 
 bot.addListener('message', async (from, to, message) => {
-    // Plugin management commands
     const loadMatch = message.match(/^!load (\w+)/i);
     const unloadMatch = message.match(/^!unload (\w+)/i);
     const reloadMatch = message.match(/^!reload (\w+)/i);
+    const isAdmin = config.admins.includes(from);
+    if (loadMatch || unloadMatch || reloadMatch) {
+        if (!isAdmin) {
+            bot.say(to, 'You are not authorized to manage plugins.');
+            return;
+        }
+    }
     if (loadMatch) {
         await pluginManager.loadPlugin(loadMatch[1], to);
         return;

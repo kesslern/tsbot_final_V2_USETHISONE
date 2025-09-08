@@ -5,6 +5,7 @@ const config: BotConfig = {
   port: 6667,
   nick: 'TypeScriptBot',
   channels: ['#examplechannel'],
+  admins: ['YourNick'],
 };
 
 export default config;
