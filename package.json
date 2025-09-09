@@ -15,6 +15,7 @@
   "dependencies": {
     "@types/irc": "^0.5.4",
     "irc": "^0.5.2",
+    "openmeteo": "^1.2.0",
     "zod": "^4.1.5"
   },
   "devDependencies": {
