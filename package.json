@@ -1,5 +1,5 @@
 {
-  "name": "abot",
+  "name": "tsbot_final_V2_USETHISONE",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -29,5 +29,8 @@
     "prettier": "^3.6.2",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.42.0"
+  },
+  "volta": {
+    "node": "24.1.0"
   }
 }
