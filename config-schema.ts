@@ -7,6 +7,7 @@ export const BotConfigSchema = z.object({
   channels: z.array(z.string().min(1)).min(1),
   admins: z.array(z.string().min(1)).min(1),
   prefix: z.string().length(1), // Command prefix, one character
+  plugins: z.array(z.string().min(1)).optional(), // Plugins to load on start
 });
 
 export type BotConfig = z.infer<typeof BotConfigSchema>;

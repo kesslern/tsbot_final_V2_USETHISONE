@@ -30,6 +30,14 @@ const bot = new irc.Client(config.server, config.nick, {
 
 const pluginManager = new PluginManager(path.join(__dirname, 'plugins'), bot);
 
+// Load plugins from config on startup
+if (config.plugins && config.plugins.length > 0) {
+  console.log(`Loading ${config.plugins.length} plugin(s) from config...`);
+  for (const pluginName of config.plugins) {
+    await pluginManager.loadPluginSilent(pluginName);
+  }
+}
+
 bot.addListener('registered', () => {
   console.log(`Connected to ${config.server}`);
 });

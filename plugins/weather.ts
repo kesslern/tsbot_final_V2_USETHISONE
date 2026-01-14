@@ -48,7 +48,7 @@ const weather: Plugin = {
           const forecastLines: string[] = [];
           const range = (start: number, stop: number, step: number) => Array.from({ length: (stop - start) / step }, (_, i) => start + i * step);
           const timeArr = range(Number(daily.time()), Number(daily.timeEnd()), daily.interval()).map(
-            (t) => new Date((t + response.utcOffsetSeconds()) * 1000)
+            (t) => new Date(t * 1000)
           );
           const weatherCodes = daily.variables(0)?.valuesArray() || [];
           const tempMax = daily.variables(1)?.valuesArray() || [];

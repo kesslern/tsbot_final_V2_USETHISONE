@@ -36,6 +36,24 @@ export class PluginManager {
     }
   }
 
+  async loadPluginSilent(pluginName: string): Promise<boolean> {
+    const pluginPath = path.join(this.pluginDir, pluginName + '.ts');
+    if (!fs.existsSync(pluginPath)) {
+      console.error(`Plugin '${pluginName}' not found at ${pluginPath}`);
+      return false;
+    }
+    try {
+      const pluginModule = await import(pluginPath + `?update=${Date.now()}`);
+      const plugin: Plugin = pluginModule.default;
+      this.plugins[pluginName] = plugin;
+      console.log(`Plugin '${pluginName}' loaded.`);
+      return true;
+    } catch (err) {
+      console.error(`Failed to load plugin '${pluginName}':`, err);
+      return false;
+    }
+  }
+
   unloadPlugin(pluginName: string, channel: string) {
     if (!this.plugins[pluginName]) {
       this.bot.say(channel, `Plugin '${pluginName}' is not loaded.`);
