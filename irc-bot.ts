@@ -46,7 +46,7 @@ bot.addListener('join', (channel, nick) => {
   pluginManager.handleJoin(channel, nick);
 });
 
-bot.addListener('message', async (from, to, message) => {
+const handleMessage = async (from: string, to: string, message: string) => {
   const prefix = config.prefix;
   const escapedPrefix = prefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const loadMatch = message.match(new RegExp(`^${escapedPrefix}load (\\w+)`, 'i'));
@@ -72,6 +72,16 @@ bot.addListener('message', async (from, to, message) => {
     return;
   }
   pluginManager.handleMessage(from, to, message);
+};
+
+bot.addListener('message', async (from, to, message) => {
+  await handleMessage(from, to, message);
+});
+
+// Handle private messages explicitly
+bot.addListener('pm', async (from, message) => {
+  console.log(`PM from ${from}: ${message}`);
+  await handleMessage(from, from, message);
 });
 
 bot.addListener('error', (message) => {
