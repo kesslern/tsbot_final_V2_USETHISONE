@@ -1,7 +1,7 @@
 import irc from 'irc';
 import path from 'path';
 import fs from 'fs';
-import BetterSQLite3 from 'better-sqlite3';
+import type BetterSQLite3 from 'better-sqlite3';
 import { openDatabase, createStorage, type Storage } from './storage.ts';
 
 export type Plugin = {
