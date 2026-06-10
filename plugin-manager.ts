@@ -1,22 +1,27 @@
 import irc from 'irc';
 import path from 'path';
 import fs from 'fs';
+import BetterSQLite3 from 'better-sqlite3';
+import { openDatabase, createStorage, type Storage } from './storage.ts';
 
 export type Plugin = {
   name: string;
-  onMessage?: (params: { from: string; to: string; message: string; bot: irc.Client }) => void;
-  onJoin?: (params: { channel: string; nick: string; bot: irc.Client }) => void;
+  onMessage?: (params: { from: string; to: string; message: string; bot: irc.Client; storage: Storage }) => void;
+  onJoin?: (params: { channel: string; nick: string; bot: irc.Client; storage: Storage }) => void;
   unload?: () => void;
 };
 
 export class PluginManager {
   private plugins: Record<string, Plugin> = {};
+  private storages: Record<string, Storage> = {};
   private pluginDir: string;
   private bot: irc.Client;
+  private db: BetterSQLite3.Database;
 
   constructor(pluginDir: string, bot: irc.Client) {
     this.pluginDir = pluginDir;
     this.bot = bot;
+    this.db = openDatabase(path.join(pluginDir, '..', 'data', 'bot.db'));
   }
 
   async loadPlugin(pluginName: string, channel: string) {
@@ -30,6 +35,7 @@ export class PluginManager {
       const pluginModule = await import(pluginPath + `?update=${Date.now()}`);
       const plugin: Plugin = pluginModule.default;
       this.plugins[pluginName] = plugin;
+      this.storages[pluginName] = createStorage(this.db, pluginName);
       this.bot.say(channel, `Plugin '${pluginName}' loaded.`);
     } catch (err) {
       this.bot.say(channel, `Failed to load plugin '${pluginName}': ${err}`);
@@ -45,6 +51,7 @@ export class PluginManager {
       this.plugins[pluginName].unload();
     }
     delete this.plugins[pluginName];
+    delete this.storages[pluginName];
     this.bot.say(channel, `Plugin '${pluginName}' unloaded.`);
   }
 
@@ -54,14 +61,18 @@ export class PluginManager {
   }
 
   handleJoin(channel: string, nick: string) {
-    Object.values(this.plugins).forEach((plugin) => {
-      if (plugin.onJoin) {plugin.onJoin({ channel, nick, bot: this.bot });}
+    Object.entries(this.plugins).forEach(([name, plugin]) => {
+      if (plugin.onJoin) {
+        plugin.onJoin({ channel, nick, bot: this.bot, storage: this.storages[name] });
+      }
     });
   }
 
   handleMessage(from: string, to: string, message: string) {
-    Object.values(this.plugins).forEach((plugin) => {
-      if (plugin.onMessage) {plugin.onMessage({ from, to, message, bot: this.bot });}
+    Object.entries(this.plugins).forEach(([name, plugin]) => {
+      if (plugin.onMessage) {
+        plugin.onMessage({ from, to, message, bot: this.bot, storage: this.storages[name] });
+      }
     });
   }
 }
