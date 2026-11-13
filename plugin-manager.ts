@@ -1,10 +1,11 @@
 import irc from 'irc';
 import path from 'path';
 import fs from 'fs';
+import type { BotConfig } from './config-schema.ts';
 
 export type Plugin = {
   name: string;
-  onMessage?: (params: { from: string; to: string; message: string; bot: irc.Client }) => void;
+  onMessage?: (params: { from: string; to: string; message: string; bot: irc.Client; config: BotConfig }) => void;
   onJoin?: (params: { channel: string; nick: string; bot: irc.Client }) => void;
   unload?: () => void;
 };
@@ -77,9 +78,9 @@ export class PluginManager {
     });
   }
 
-  handleMessage(from: string, to: string, message: string) {
+  handleMessage(from: string, to: string, message: string, config: BotConfig) {
     Object.values(this.plugins).forEach((plugin) => {
-      if (plugin.onMessage) {plugin.onMessage({ from, to, message, bot: this.bot });}
+      if (plugin.onMessage) {plugin.onMessage({ from, to, message, bot: this.bot, config });}
     });
   }
 }

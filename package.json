@@ -13,6 +13,8 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@earendil-works/pi-agent-core": "^0.99.1",
+    "@earendil-works/pi-ai": "^0.99.1",
     "@types/irc": "^0.5.4",
     "irc": "^0.5.2",
     "openmeteo": "^1.2.0",

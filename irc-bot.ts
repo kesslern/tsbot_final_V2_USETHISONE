@@ -52,13 +52,35 @@ const handleMessage = async (from: string, to: string, message: string) => {
   const loadMatch = message.match(new RegExp(`^${escapedPrefix}load (\\w+)`, 'i'));
   const unloadMatch = message.match(new RegExp(`^${escapedPrefix}unload (\\w+)`, 'i'));
   const reloadMatch = message.match(new RegExp(`^${escapedPrefix}reload (\\w+)`, 'i'));
+  const reloadConfigMatch = message.match(new RegExp(`^${escapedPrefix}reloadconfig`, 'i'));
   const isAdmin = config.admins.includes(from);
-  if (loadMatch || unloadMatch || reloadMatch) {
+
+  if (loadMatch || unloadMatch || reloadMatch || reloadConfigMatch) {
     if (!isAdmin) {
       bot.say(to, 'You are not authorized to manage plugins.');
       return;
     }
   }
+
+  if (reloadConfigMatch) {
+    try {
+      // Reload config with cache bust
+      const configModule = await import('./config.ts?update=' + Date.now());
+      const parsed = BotConfigSchema.safeParse(configModule.default);
+      if (!parsed.success) {
+        bot.say(to, 'Failed to reload config: Invalid configuration.');
+        console.error('Config validation error:', parsed.error.format());
+        return;
+      }
+      config = parsed.data;
+      bot.say(to, 'Config reloaded successfully. Note: Some plugins may need to be reloaded to pick up changes.');
+    } catch (err) {
+      bot.say(to, `Failed to reload config: ${err}`);
+      console.error('Config reload error:', err);
+    }
+    return;
+  }
+
   if (loadMatch) {
     await pluginManager.loadPlugin(loadMatch[1], to);
     return;
@@ -71,7 +93,7 @@ const handleMessage = async (from: string, to: string, message: string) => {
     await pluginManager.reloadPlugin(reloadMatch[1], to);
     return;
   }
-  pluginManager.handleMessage(from, to, message);
+  pluginManager.handleMessage(from, to, message, config);
 };
 
 bot.addListener('message', async (from, to, message) => {

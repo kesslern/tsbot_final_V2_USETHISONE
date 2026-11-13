@@ -1,0 +1,6 @@
+allowBuilds:
+  '@google/genai': false
+  esbuild: false
+  iconv: false
+  node-icu-charset-detector: false
+  protobufjs: false
